@@ -1,0 +1,15 @@
+*.fa
+*~
+simple-genome-reads-corr.sam
+simple-genome-reads.fa.corr
+simple-genome-reads.mut
+simple-genome-reads.sam
+simple-genome-sam-corr-mismatches.pos
+simple-genome-sam-mismatches.pos
+simple-genome.1.bt2
+simple-genome.2.bt2
+simple-genome.3.bt2
+simple-genome.4.bt2
+simple-genome.fa.fai
+simple-genome.rev.1.bt2
+simple-genome.rev.2.bt2
