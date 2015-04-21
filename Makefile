@@ -3,7 +3,10 @@ KHMER=../khmer
 
 all: simple-genome-reads.fa simple-genome-reads.fa.corr \
 	simple-genome-sam-corr-mismatches.pos \
-	simple-genome-sam-mismatches.pos
+	simple-genome-sam-mismatches.pos compare-sim.txt
+
+clean:
+	-rm simple-genome-reads.fa
 
 simple-genome.fa:
 	$(NULLGRAPH)/make-random-genome.py -l 1000 -s 1 > simple-genome.fa
@@ -32,6 +35,6 @@ simple-genome-reads-corr.sam: simple-genome-reads.fa.corr
 simple-genome-sam-corr-mismatches.pos: simple-genome-reads-corr.sam
 	./sam-scan.py simple-genome.fa simple-genome-reads-corr.sam -o simple-genome-sam-corr-mismatches.pos
 
-compare-sim.txt:
-	./summarize-pos-file.py simple-genome-sam-mismatches.pos simple-genome-reads.fa
-	./summarize-pos-file.py simple-genome-sam-corr-mismatches.pos simple-genome-reads.fa.corr
+compare-sim.txt: simple-genome-sam-corr-mismatches.pos  simple-genome-sam-mismatches.pos
+	./summarize-pos-file.py simple-genome-sam-mismatches.pos simple-genome-reads.fa > compare-sim.txt
+	./summarize-pos-file.py simple-genome-sam-corr-mismatches.pos simple-genome-reads.fa.corr >> compare-sim.txt
