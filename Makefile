@@ -90,8 +90,8 @@ ecoli-subset.100k.quake.fq: ecoli-subset.100k.cor.fq.gz ecoli-subset.100k.fq
 ecoli.dn.k21.kh: ecoli-mapped.fq.gz.keep.gz
 	load-into-counting.py -k 21 -x 8e7 ecoli.dn.k21.kh ecoli-mapped.fq.gz.keep.gz
 
-corr.k21.C5.fq: ecoli.dn.k21.kh ecoli-subset.100k.fq
-	$(KHMER)/sandbox/error-correct-pass2.py ecoli.dn.k21.kh ecoli-subset.100k.fq -o corr.k21.C5.fq --trusted-cov 5
+corr.k21.C5.fq: ecoli.dn.k21.kh ecoli-subset.100k.quake.fq
+	$(KHMER)/sandbox/error-correct-pass2.py ecoli.dn.k21.kh ecoli-subset.100k.quake.fq -o corr.k21.C5.fq --trusted-cov 5
 
 ecoli.1.bt2: ecoliMG1655.fa
 	bowtie2-build ecoliMG1655.fa ecoli
