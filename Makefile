@@ -1,4 +1,5 @@
 # wok1: https://github.com/ctb/2015-khmer-wok1-ec
+# use khmer branch '2015-wok'
 
 NULLGRAPH=../nullgraph
 KHMER=../khmer

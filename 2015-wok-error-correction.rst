@@ -1,4 +1,5 @@
-
+Read-to-graph alignment and error correction
+============================================
 
 One of the features in khmer that we're pretty excited about is
 the read-to-graph aligner, which gives us a way to align sequences
@@ -20,7 +21,8 @@ The core API is based around the concept of a ReadAligner object::
 
     aligner = khmer.ReadAligner(graph, trusted_cov, bits_theta)
 
-where 'trusted_cov' defines what the trusted k-mer coverage is, and
+where 'graph' is a De Bruijn graph (implemented as a counting table in
+khmer), 'trusted_cov' defines what the trusted k-mer coverage is, and
 bits_theta adjusts a scoring parameter used to extend alignments.
 
 This object can be used to align short sequences to the graph::
@@ -59,8 +61,8 @@ like this::
     aligner = khmer.ReadAligner(graph, trusted_cov, bits_theta)
 
     for read in dataset:
-        score, ga, ra, is_trunc = aligner.align(read)
-        corrected_read = ga
+        score, graph_align, read_align, is_truncated = aligner.align(read)
+        corrected_read = graph_align
 
 In conjunction with `our work on semi-streaming algorithms
 <https://peerj.com/preprints/890/>`__, we can directly convert this
@@ -78,7 +80,7 @@ it takes the simulated data from an error rate of around 1% to about
 0.1%; see `compare-sim.txt
 <https://github.com/ctb/2015-khmer-wok1-ec/blob/master/compare-sim.txt>`__.
 
-Appying this to the same ~750k read subset of mRNAseq that we tackled
+Applying this to a ~750k read subset of mRNAseq that we tackled
 in the semi-streaming paper (the data itself is from the `Trinity
 paper, Grabherr et al, 2011
 <http://www.ncbi.nlm.nih.gov/pubmed/21572440>`__), we take the data
@@ -97,8 +99,8 @@ correcting RNAseq data as use do for genomic data.
 How good is the error correction?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-tl; dr? It's pretty good but not better than current methods.  When we
-compare to Quake results on an E. coli data set (target
+tl; dr? It's pretty good but still worse than current methods.  When
+we compare to Quake results on an E. coli data set (target
 `compare-ecoli.txt
 <https://github.com/ctb/2015-khmer-wok1-ec/blob/master/compare-ecoli.txt>`__
 in `the Makefile
@@ -113,10 +115,83 @@ Quake         0.010%
 khmer         0.015%
 ============  ==========
 
+This isn't too bad - two orders of magnitude decrease in error rate! -
+but we'd like to at least be able to beat Quake :).
+
 (Note that here we do a fair comparison by looking only at errors on
 sequences that Quake doesn't discard.)
 
 Concluding thoughts
 ~~~~~~~~~~~~~~~~~~~
 
-What attracts us to this approach is that it's really *simple*.
+What attracts us to this approach is that it's really *simple*.  The
+basic error correction is `a few lines
+<https://github.com/dib-lab/khmer/blob/2015-wok/sandbox/correct-reads.py#L39>`__,
+although it's surrounded by a bunch of machinery for doing
+semi-streaming analysis and keeping pairing intact.  (The
+`two-pass/offline script for error correction
+<https://github.com/dib-lab/khmer/blob/2015-wok/sandbox/error-correct-pass2.py>`__
+is much cleaner, because it omits all of this machinery.)
+
+It's also nice that this applies to all shotgun sequencing, not just
+genomic; that's a trivial extension of `our semi-streaming paper
+<https://peerj.com/preprints/890/>`__.
+
+We also suspect that this approach is quite tunable, although we are just
+beginning to investigate the proper way to build parameters for the
+pair-HMM, and we haven't nailed down the right coverage/cutoff parameters
+for error correction either.  More work to be done!
+
+In any case, there's also more than error correction to be done with
+the graphalign approach -- stay tuned!
+
+References and other work
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is by no means novel - we're building on a lot of ideas from a lot
+of people.  A short summary, by no means complete --
+
+* Much of this was proximally inspired by Jordan's work on `Xander
+  <https://github.com/rdpstaff/Xander-HMMgs>`__, software to do
+  HMM-guided gene assembly from metagenomic data.  (An accompanying
+  paper has been accepted for publication; will blog about that when
+  it hits.)
+
+* More generally, my MSU colleague `Yanni Sun
+  <https://sites.google.com/site/yannisun/>`__ has had several PhD
+  students that have worked on HMMs and graph alignment, and she and
+  her students have been great sources of ideas!  (She co-advised
+  Jordan.)
+
+* `BlastGraph <http://alcovna.genouest.org/blastgraph/>`__, like
+  Xander, built on the idea of graph alignment.  It is the earliest
+  reference I know of to graph alignment, but I haven't looked very hard.
+
+* `Yuzhen Ye <http://mendel.informatics.indiana.edu/~yye/lab/>`__ and
+  `Haixu Tang <http://www.informatics.indiana.edu/hatang/>`__ at
+  Indiana have developed very similar functionality that I became
+  aware of when reviewing `their nice paper on graph alignment for
+  metatranscriptomics
+  <https://scholar.google.com/citations?view_op=view_citation&hl=en&user=4Hywr5UAAAAJ&sortby=pubdate&citation_for_view=4Hywr5UAAAAJ:LI9QrySNdTsC>`__.
+
+* Jared Simpson has been `doing nice work
+  <http://simpsonlab.github.io/2015/04/08/eventalign/>`__ on aligning
+  Nanopore reads to a reference sequence.  My guess is that the
+  multiple sequence alignment approach described in `Jonathan Dursi's
+  blog post
+  <http://simpsonlab.github.io/2015/05/01/understanding-poa/>`__ is
+  going to prove relevant to use.
+
+* The error corrector Coral `(Salmela and Schroder, 2011)
+  <http://www.ncbi.nlm.nih.gov/pubmed/21471014>`__ bears a strong
+  resemblance to graphalign in its approach to error correction.
+
+If you know of more, please add references below, in the comments -
+much appreciated!
+
+Appendix: Running this code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+https://github.com/ctb/2015-khmer-wok1-ec/blob/master/
+
+(Provide docker container, AWS instructions.)
