@@ -1,8 +1,8 @@
 
 
 One of the features in khmer that we're pretty excited about is
-the read-to-graph aligner, which gives you a way to align sequences
-to a De Bruijn graph; my nickname for it is "graphalign."
+the read-to-graph aligner, which gives us a way to align sequences
+to a De Bruijn graph; our nickname for it is "graphalign."
 
 Briefly, graphalign uses a pair-HMM to align a sequence to a k-mer
 graph (aka De Bruijn graph) allowing both mismatches and indels, and
@@ -11,7 +11,7 @@ untrusted k-mers).  The core code was written by Jordan Fish when he
 was a graduate student in the lab, and was then refactored by Michael
 Crusoe.
 
-Graphalign actually lets you do lots of things, including align both
+Graphalign actually lets us do lots of things, including align both
 short and long sequences to DBG graphs, error correct, and call
 variants.  We've got a simple API built into khmer, and we're working
 to build it out.
@@ -36,8 +36,6 @@ The approach used by 'align' is to seed an alignment at the first trusted
 k-mer, and then extend the alignment along the graph in both directions.
 Thus, it's effectively a local aligner.
 
-----
-
 Error correction
 ~~~~~~~~~~~~~~~~
 
@@ -51,7 +49,7 @@ a bit more programmable than the existing error correctors, which were
 primarily command-line tools; we've found a lot of value in building
 libraries, and wanted to use that approach here, too.
 
-The basic idea is this: you build a graph from your short-read data,
+The basic idea is this: we build a graph from our short-read data,
 and then go back through and align each short read to the graph.  A
 successful alignment is then the corrected read.  The basic code looks
 like this::
@@ -73,31 +71,52 @@ and transcriptomes.  This is implemented in the `correct-errors script
 Some results
 ~~~~~~~~~~~~
 
-If you try this out on a simulated data set (random genome, randomly
-chosen reads - see target ``compare-sim.txt`` in @@Makefile), it takes
-the simulated data from an error rate of around 1% to about 0.5%.
+If we try this out on a simulated data set (random genome, randomly
+chosen reads - see target ``compare-sim.txt`` in `the Makefile
+<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/Makefile>`__),
+it takes the simulated data from an error rate of around 1% to about
+0.1%; see `compare-sim.txt
+<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/compare-sim.txt>`__.
 
 Appying this to the same ~750k read subset of mRNAseq that we tackled
-in the semi-streaming paper (the data itself is from the @@Trinity
-paper), we take the data from an error rate of about 2.1% to 1.5% (see
-target ``rseq-compare.txt`` in @@Makefile).  The main reason that this
-doesn't correct many errors is that the error correction here depends on
-high coverage, and much of this RNAseq data set is low coverage.
+in the semi-streaming paper (the data itself is from the `Trinity
+paper, Grabherr et al, 2011
+<http://www.ncbi.nlm.nih.gov/pubmed/21572440>`__), we take the data
+from an error rate of about 2.1% to 1.2% (see target
+``rseq-compare.txt`` in `Makefile
+<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/Makefile>`__).
+There are several reasons why this doesn't correct many errors -
+first, error correction depends on high coverage, and much of this
+RNAseq data set is low coverage; second, this data set has a lot of
+errors; and third, RNAseq may have a broader k-mer abundance
+distribution than genomic sequencing.
 
-One important side note: you use exactly the same script for error correcting
-RNAseq data as you do for genomic data.
+One important side note: we use exactly the same script for error
+correcting RNAseq data as use do for genomic data.
 
 How good is the error correction?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-tl; dr? It's OK but not great.
+tl; dr? It's pretty good but not better than current methods.  When we
+compare to Quake results on an E. coli data set (target
+`compare-ecoli.txt
+<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/compare-ecoli.txt>`__
+in `the Makefile
+<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/Makefile>`__),
+we see:
 
-compare-ecoli.txt.
+============  ==========
+Data set      Error rate
+============  ==========
+Uncorrected   1.576%
+Quake         0.010%
+khmer         0.015%
+============  ==========
 
-Here it's worth pointing out that since the graphalign code is based
-on a pair-HMM model that we haven't fully studied, we've spent a lot
-more time trying to understand the overall dynamics of training and
-implementation than we have on optimizing specific parameters.  While
-we're confident that we can improve it substantially, this may involve
-complexifying the HMM model or doing a better job of training - again,
-something we haven't spent much time on.
+(Note that here we do a fair comparison by looking only at errors on
+sequences that Quake doesn't discard.)
+
+Concluding thoughts
+~~~~~~~~~~~~~~~~~~~
+
+What attracts us to this approach is that it's really *simple*.
