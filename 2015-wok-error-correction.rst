@@ -194,4 +194,6 @@ Appendix: Running this code
 
 https://github.com/ctb/2015-khmer-wok1-ec/blob/master/
 
+Use '2015-wok' branch of khmer.
+
 (Provide docker container, AWS instructions.)
