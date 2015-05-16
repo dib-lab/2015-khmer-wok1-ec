@@ -72,7 +72,7 @@ Some results
 ~~~~~~~~~~~~
 
 If we try this out on a simulated data set (random genome, randomly
-chosen reads - see target ``compare-sim.txt`` in `the Makefile
+chosen reads - see target ``compare-sim.txt`` in `Makefile
 <https://github.com/ctb/2015-khmer-wok1-ec/blob/master/Makefile>`__),
 it takes the simulated data from an error rate of around 1% to about
 0.1%; see `compare-sim.txt
@@ -85,11 +85,11 @@ paper, Grabherr et al, 2011
 from an error rate of about 2.1% to 1.2% (see target
 ``rseq-compare.txt`` in `Makefile
 <https://github.com/ctb/2015-khmer-wok1-ec/blob/master/Makefile>`__).
-There are several reasons why this doesn't correct many errors -
-first, error correction depends on high coverage, and much of this
-RNAseq data set is low coverage; second, this data set has a lot of
-errors; and third, RNAseq may have a broader k-mer abundance
-distribution than genomic sequencing.
+There are several reasons why this misses many errors - first, error
+correction depends on high coverage, and much of this RNAseq data set
+is low coverage; second, this data set has a lot of errors; and third,
+RNAseq may have a broader k-mer abundance distribution than genomic
+sequencing.
 
 One important side note: we use exactly the same script for error
 correcting RNAseq data as use do for genomic data.
