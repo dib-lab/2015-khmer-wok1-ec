@@ -1,0 +1,16 @@
+reading files... rseq-sam-mismatches.pos rseq-mapped.fq.gz
+reading sequences...
+done!
+XXX 791687 390090
+posfile rseq-sam-mismatches.pos: 390090 mutated reads of 390090; 1248036 mutations total
+skipped: 0
+60168212 bp total
+overall error rate: 2.074245%
+reading files... rseq-corr-mismatches.pos rseq-mapped.fq.gz
+reading sequences...
+done!
+XXX 791687 130183
+posfile rseq-corr-mismatches.pos: 130183 mutated reads of 130183; 715307 mutations total
+skipped: 0
+60168212 bp total
+overall error rate: 1.188845%

@@ -1,0 +1,24 @@
+reading files... ecoli-raw.pos ecoli-subset.100k.fq
+reading sequences...
+done!
+XXX 100000 42586
+posfile ecoli-raw.pos: 42586 mutated reads of 42586; 157608 mutations total
+skipped: 0
+10000000 bp total
+overall error rate: 1.576080%
+reading files... ecoli-quake.pos ecoli-subset.100k.cor.fq.gz
+reading sequences...
+done!
+XXX 98772 364
+posfile ecoli-quake.pos: 364 mutated reads of 364; 876 mutations total
+skipped: 0
+9084125 bp total
+overall error rate: 0.009643%
+reading files... ecoli-corr.pos corr.k21.C5.fq
+reading sequences...
+done!
+XXX 98772 514
+posfile ecoli-corr.pos: 514 mutated reads of 514; 1384 mutations total
+skipped: 0
+9084125 bp total
+overall error rate: 0.015235%

@@ -1,0 +1,16 @@
+reading files... simple-genome-sam-mismatches.pos simple-genome-reads.fa
+reading sequences...
+done!
+XXX 1000 633
+posfile simple-genome-sam-mismatches.pos: 633 mutated reads of 633; 1025 mutations total
+skipped: 0
+100000 bp total
+overall error rate: 1.025000%
+reading files... simple-genome-sam-corr-mismatches.pos simple-genome-reads.fa.corr
+reading sequences...
+done!
+XXX 1000 85
+posfile simple-genome-sam-corr-mismatches.pos: 85 mutated reads of 85; 92 mutations total
+skipped: 0
+100000 bp total
+overall error rate: 0.092000%

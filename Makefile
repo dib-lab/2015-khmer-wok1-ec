@@ -1,3 +1,5 @@
+# wok1: https://github.com/ctb/2015-khmer-wok1-ec
+
 NULLGRAPH=../nullgraph
 KHMER=../khmer
 QUAKE=/Users/t/Documents/papers/2014-streaming/Quake
@@ -5,11 +7,15 @@ QUAKE=/Users/t/Documents/papers/2014-streaming/Quake
 # rseq-mapped.fq.gz and rna.fa from 2014-streaming paper pipeline.
 # ecoli-mapped.fq.gz also from 2014-streaming paper pipeline.
 
-all: compare-sim.txt compare-rseq.txt compare-ecoli.txt
+all: compare-sim.txt compare-rseq.txt compare-ecoli.txt \
+	2015-wok-error-correction.html
 
 clean:
 	-rm simple-genome-reads.fa rseq-mapped.fq.gz.corr
 	-rm ecoli-mapped.fq.gz.keep.gz
+
+2015-wok-error-correction.html: 2015-wok-error-correction.rst
+	rst2html.py 2015-wok-error-correction.rst 2015-wok-error-correction.html
 
 simple-genome.fa:
 	$(NULLGRAPH)/make-random-genome.py -l 1000 -s 1 > simple-genome.fa
@@ -18,7 +24,7 @@ simple-genome-reads.fa: simple-genome.fa
 	$(NULLGRAPH)/make-reads.py -S 1 -e .01 -r 100 -C 100 simple-genome.fa --mutation-details simple-genome-reads.mut > simple-genome-reads.fa
 
 simple-genome-reads.fa.corr: simple-genome-reads.fa
-	$(KHMER)/sandbox/correct-errors.py -x 1e7 -N 4 -k 21 simple-genome-reads.fa
+	$(KHMER)/sandbox/correct-reads.py -x 1e7 -N 4 -k 21 simple-genome-reads.fa
 
 simple-genome-reads.sam: simple-genome-reads.fa
 	bowtie2-build simple-genome.fa simple-genome > /dev/null
@@ -49,7 +55,7 @@ rseq.1.bt2: rna.fa
 	samtools faidx rna.fa
 
 rseq-mapped.fq.gz.corr: rseq-mapped.fq.gz
-	$(KHMER)/sandbox/correct-errors.py -k 20 -Z 20 -C 3 -x 1e8 -N 4 rseq-mapped.fq.gz
+	$(KHMER)/sandbox/correct-reads.py -k 20 -Z 20 -C 3 -x 1e8 -N 4 rseq-mapped.fq.gz
 
 rseq-corr.sam: rseq-mapped.fq.gz.corr rseq.1.bt2
 	bowtie2 -p 4 -x rseq -U rseq-mapped.fq.gz.corr -S rseq-corr.sam
