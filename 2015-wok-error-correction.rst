@@ -76,7 +76,7 @@ like this::
 In conjunction with `our work on semi-streaming algorithms
 <https://peerj.com/preprints/890/>`__, we can directly convert this
 into a semi-streaming algorithm that works on genomes, metagenomes,
-and transcriptomes.  This is implemented in the `correct-errors script
+and transcriptomes.  This is implemented in the `correct-reads script
 <https://github.com/dib-lab/khmer/blob/2015-wok/sandbox/correct-reads.py>`__.
 
 Some results
@@ -128,10 +128,11 @@ This isn't too bad - two orders of magnitude decrease in error rate! -
 but we'd like to at least be able to beat Quake :).
 
 (Note that here we do a fair comparison by looking only at errors on
-sequences that Quake doesn't discard.  We are also making use of the
-approach developed in the streaming paper where we digitally normalize
-the graph in advance, in order to decrease the number of errors and the
-size of the graph.)
+sequences that Quake doesn't discard; to get comparable results on
+your data with khmer, you'd also have to trim your reads.  We are also
+making use of the approach developed in the streaming paper where we
+digitally normalize the graph in advance, in order to decrease the
+number of errors and the size of the graph.)
 
 Concluding thoughts
 ~~~~~~~~~~~~~~~~~~~
@@ -200,7 +201,7 @@ Here is short summary of previous work, surely incomplete --
 
 * The error corrector Coral `(Salmela and Schroder, 2011)
   <http://www.ncbi.nlm.nih.gov/pubmed/21471014>`__ bears a strong
-  philsophical resemblance to graphalign in its approach to error
+  philosophical resemblance to graphalign in its approach to error
   correction, if you think of a De Bruijn graph as a kind of
   multiple-sequence alignment.
 
