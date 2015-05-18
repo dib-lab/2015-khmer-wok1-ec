@@ -38,6 +38,21 @@ Log back in, and set yourself up with a virtualenv::
    pip install -U setuptools
    git clone https://github.com/dib-lab/nullgraph.git
 
+Install a few external packages (Jellyfish and Quake)::
+
+   curl -O http://www.cbcb.umd.edu/software/jellyfish/jellyfish-1.1.11.tar.gz
+   curl -O http://www.cbcb.umd.edu/software/quake/downloads/quake-0.3.5.tar.gz
+
+   tar xzf jellyfish-1.1.11.tar.gz
+   cd jellyfish-1.1.11/
+   ./configure && make 
+   cd ../
+
+   tar xzf quake-0.3.5.tar.gz 
+   cd Quake/src
+   make
+   cd ../../
+
 Now install the `2015-wok
 <https://github.com/dib-lab/khmer/tree/2015-wok>`__ branch of khmer::
 
@@ -63,6 +78,9 @@ and grab the data::
         | gunzip -c \
         > rna.fa
 
+   curl -O https://s3.amazonaws.com/public.ged.msu.edu/ecoliMG1655.fa.gz
+   gunzip ecoliMG1655.fa
+
 And, finally, run the pipeline::
 
    make
@@ -85,3 +103,31 @@ sure to give the ubuntu user permissions to run docker::
 
 and then log out & back in to enable those permissions.
 
+Go to a sizeable working directory that you have permissions to write
+to; on AWS, this is /mnt. ::
+
+   sudo chmod a+rwxt /mnt
+   cd /mnt
+
+Then, clone the pipeline::
+
+   git clone https://github.com/dib-lab/2015-khmer-wok1-ec.git wok1
+
+and grab the data::
+
+   cd wok1
+   curl -O https://s3.amazonaws.com/public.ged.msu.edu/2015-wok/ecoli-mapped.fq.gz
+   curl -O https://s3.amazonaws.com/public.ged.msu.edu/2015-wok/rseq-mapped.fq.gz
+   curl https://s3.amazonaws.com/public.ged.msu.edu/2014-paper-streaming/mouse-ref.fa.gz \
+        | gunzip -c \
+        > rna.fa
+
+   curl -O https://s3.amazonaws.com/public.ged.msu.edu/ecoliMG1655.fa.gz
+   gunzip ecoliMG1655.fa
+
+And, finally, run the pipeline::
+
+   docker run -v /mnt/wok1:/pipeline  titus/test
+
+To interpret the results, please see the blog post above, or look through
+the Makefile.
