@@ -127,7 +127,7 @@ and grab the data::
 
 And, finally, run the pipeline::
 
-   docker run -v /mnt/wok1:/pipeline  titus/test
+   docker run -v /mnt/wok1:/pipeline titus/2015-wok
 
 To interpret the results, please see the blog post above, or look through
 the Makefile.
