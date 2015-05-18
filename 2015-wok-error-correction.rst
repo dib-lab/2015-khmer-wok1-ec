@@ -84,10 +84,10 @@ Some results
 
 If we try this out on a simulated data set (random genome, randomly
 chosen reads - see target ``compare-sim.txt`` in `Makefile
-<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/Makefile>`__),
+<https://github.com/dib-lab/2015-khmer-wok1-ec/blob/master/Makefile>`__),
 it takes the simulated data from an error rate of around 1% to about
 0.1%; see `compare-sim.txt
-<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/compare-sim.txt>`__.
+<https://github.com/dib-lab/2015-khmer-wok1-ec/blob/master/compare-sim.txt>`__.
 
 Applying this to a ~750k read subset of mRNAseq that we tackled
 in the semi-streaming paper (the data itself is from the `Trinity
@@ -95,7 +95,7 @@ paper, Grabherr et al, 2011
 <http://www.ncbi.nlm.nih.gov/pubmed/21572440>`__), we take the data
 from an error rate of about 2.1% to 1.2% (see target
 ``rseq-compare.txt`` in `Makefile
-<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/Makefile>`__).
+<https://github.com/dib-lab/2015-khmer-wok1-ec/blob/master/Makefile>`__).
 There are several reasons why this misses many errors - first, error
 correction depends on high coverage, and much of this RNAseq data set
 is low coverage; second, this data set has a lot of errors; and third,
@@ -111,9 +111,9 @@ How good is the error correction?
 tl; dr? It's pretty good but still worse than current methods.  When
 we compare to Quake results on an E. coli data set (target
 `compare-ecoli.txt
-<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/compare-ecoli.txt>`__
+<https://github.com/dib-lab/2015-khmer-wok1-ec/blob/master/compare-ecoli.txt>`__
 in `the Makefile
-<https://github.com/ctb/2015-khmer-wok1-ec/blob/master/Makefile>`__),
+<https://github.com/dib-lab/2015-khmer-wok1-ec/blob/master/Makefile>`__),
 we see:
 
 ============  ==========
@@ -210,7 +210,8 @@ much appreciated!
 Appendix: Running this code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The computational results in this blog post are Rather Reproducible (TM).
-Please see https://github.com/ctb/2015-khmer-wok1-ec/blob/master/README.rst
-for instructions on replicating the results on a virtual machine or using
-a Docker container.
+The computational results in this blog post are Rather Reproducible
+(TM).  Please see
+https://github.com/dib-lab/2015-khmer-wok1-ec/blob/master/README.rst
+for instructions on replicating the results on a virtual machine or
+using a Docker container.

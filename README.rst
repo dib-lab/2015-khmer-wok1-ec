@@ -2,7 +2,7 @@ Summary information
 -------------------
 
 This is the README for the github repository
-https://github.com/ctb/2015-khmer-wok1-ec.
+https://github.com/dib-lab/2015-khmer-wok1-ec.
 
 This repository contains the pipeline underlying the blog
 post/micropub entitled `Read-to-graph alignment and error correction
@@ -36,12 +36,12 @@ Log back in, and set yourself up with a virtualenv::
    python -m virtualenv work
    . work/bin/activate
    pip install -U setuptools
-   git clone https://github.com/ged-lab/nullgraph.git
+   git clone https://github.com/dib-lab/nullgraph.git
 
 Now install the `2015-wok
 <https://github.com/dib-lab/khmer/tree/2015-wok>`__ branch of khmer::
 
-   git clone https://github.com/ged-lab/khmer.git -b 2015-wok
+   git clone https://github.com/dib-lab/khmer.git -b 2015-wok
    cd khmer && make install; cd ..
 
 Go to a sizeable working directory that you have permissions to write
@@ -52,7 +52,7 @@ to; on AWS, this is /mnt. ::
 
 Then, clone the pipeline::
 
-   git clone https://github.com/ctb/2015-khmer-wok1-ec.git wok1
+   git clone https://github.com/dib-lab/2015-khmer-wok1-ec.git wok1
 
 and grab the data::
 
