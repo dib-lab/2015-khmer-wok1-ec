@@ -89,18 +89,18 @@ it takes the simulated data from an error rate of around 1% to about
 0.1%; see `compare-sim.txt
 <https://github.com/dib-lab/2015-khmer-wok1-ec/blob/master/compare-sim.txt>`__.
 
-Applying this to a ~750k read subset of mRNAseq that we tackled
-in the semi-streaming paper (the data itself is from the `Trinity
-paper, Grabherr et al, 2011
+Applying this to a ~7m read subset of mRNAseq that we tackled in the
+semi-streaming paper (the data itself is from the `Trinity paper,
+Grabherr et al, 2011
 <http://www.ncbi.nlm.nih.gov/pubmed/21572440>`__), we take the data
-from an error rate of about 2.1% to 1.2% (see target
+from an error rate of about 1.59% to 0.98% (see target
 ``rseq-compare.txt`` in `Makefile
 <https://github.com/dib-lab/2015-khmer-wok1-ec/blob/master/Makefile>`__).
-There are several reasons why this misses many errors - first, error
-correction depends on high coverage, and much of this RNAseq data set
-is low coverage; second, this data set has a lot of errors; and third,
-RNAseq may have a broader k-mer abundance distribution than genomic
-sequencing.
+There are several reasons why this misses so many errors - first,
+error correction depends on high coverage, and much of this RNAseq
+data set is low coverage; second, this data set has a lot of errors;
+and third, RNAseq may have a broader k-mer abundance distribution than
+genomic sequencing.
 
 One important side note: we use exactly the same script for error
 correcting RNAseq data as use do for genomic data.
@@ -119,9 +119,9 @@ we see:
 ============  ==========
 Data set      Error rate
 ============  ==========
-Uncorrected   1.576%
-Quake         0.010%
-khmer         0.015%
+Uncorrected   1.587%
+Quake         0.009%
+khmer         0.013%
 ============  ==========
 
 This isn't too bad - two orders of magnitude decrease in error rate! -
