@@ -1,31 +1,40 @@
 Read-to-graph alignment and error correction
 ============================================
 
-One of the features in khmer that we're pretty excited about is
-the read-to-graph aligner, which gives us a way to align sequences
-to a De Bruijn graph; our nickname for it is "graphalign."
+:author: Jordan Fish, Jason Pell, Michael R. Crusoe, and C\. Titus Brown
+:tags: khmer,wok,graphalign,errcorr
+:date: 2015-05-18
+:slug: 2015-wok-error-correction
+:category: science
+
+One of the newer features in khmer that we're pretty excited about is
+the read-to-graph aligner, which gives us a way to align sequences to
+a De Bruijn graph; our nickname for it is "graphalign."
 
 Briefly, graphalign uses a pair-HMM to align a sequence to a k-mer
 graph (aka De Bruijn graph) allowing both mismatches and indels, and
 taking into account coverage using a binary model (trusted and
 untrusted k-mers).  The core code was written by Jordan Fish when he
-was a graduate student in the lab, and was then refactored by Michael
-Crusoe.
+was a graduate student in the lab, based on ideas stemming from Jason
+Pell's thesis work on error correction.  It was then refactored by
+Michael Crusoe.
 
 Graphalign actually lets us do lots of things, including align both
 short and long sequences to DBG graphs, error correct, and call
-variants.  We've got a simple API built into khmer, and we're working
-to build it out.
+variants.  We've got a simple Python API built into khmer, and we're
+working to extend it.
 
-The core API is based around the concept of a ReadAligner object::
+----
+
+The core graphalign API is based around the concept of a ReadAligner object::
 
     aligner = khmer.ReadAligner(graph, trusted_cov, bits_theta)
 
 where 'graph' is a De Bruijn graph (implemented as a counting table in
 khmer), 'trusted_cov' defines what the trusted k-mer coverage is, and
-bits_theta adjusts a scoring parameter used to extend alignments.
+'bits_theta' adjusts a scoring parameter used to extend alignments.
 
-This object can be used to align short sequences to the graph::
+The 'aligner' object can be used to align short sequences to the graph::
 
      score, graph_alignment, read_alignment, truncated = \
          aligner.align(read)
@@ -119,7 +128,10 @@ This isn't too bad - two orders of magnitude decrease in error rate! -
 but we'd like to at least be able to beat Quake :).
 
 (Note that here we do a fair comparison by looking only at errors on
-sequences that Quake doesn't discard.)
+sequences that Quake doesn't discard.  We are also making use of the
+approach developed in the streaming paper where we digitally normalize
+the graph in advance, in order to decrease the number of errors and the
+size of the graph.)
 
 Concluding thoughts
 ~~~~~~~~~~~~~~~~~~~
@@ -145,11 +157,15 @@ for error correction either.  More work to be done!
 In any case, there's also more than error correction to be done with
 the graphalign approach -- stay tuned!
 
-References and other work
-~~~~~~~~~~~~~~~~~~~~~~~~~
+References and previous work
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is by no means novel - we're building on a lot of ideas from a lot
-of people.  A short summary, by no means complete --
+This is by no means novel - we're building on a lot of ideas from a
+lot of people.  Our interest is in bridging from theory to practice,
+and providing a decent tunable implementation in an open-source
+package, so that we can explore these ideas more widely.
+
+Here is short summary of previous work, surely incomplete --
 
 * Much of this was proximally inspired by Jordan's work on `Xander
   <https://github.com/rdpstaff/Xander-HMMgs>`__, software to do
@@ -180,11 +196,13 @@ of people.  A short summary, by no means complete --
   multiple sequence alignment approach described in `Jonathan Dursi's
   blog post
   <http://simpsonlab.github.io/2015/05/01/understanding-poa/>`__ is
-  going to prove relevant to use.
+  going to prove relevant to us.
 
 * The error corrector Coral `(Salmela and Schroder, 2011)
   <http://www.ncbi.nlm.nih.gov/pubmed/21471014>`__ bears a strong
-  resemblance to graphalign in its approach to error correction.
+  philsophical resemblance to graphalign in its approach to error
+  correction, if you think of a De Bruijn graph as a kind of
+  multiple-sequence alignment.
 
 If you know of more, please add references below, in the comments -
 much appreciated!
@@ -192,8 +210,7 @@ much appreciated!
 Appendix: Running this code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-https://github.com/ctb/2015-khmer-wok1-ec/blob/master/
-
-Use '2015-wok' branch of khmer.
-
-(Provide docker container, AWS instructions.)
+The computational results in this blog post are Rather Reproducible (TM).
+Please see https://github.com/ctb/2015-khmer-wok1-ec/blob/master/README.rst
+for instructions on replicating the results on a virtual machine or using
+a Docker container.
