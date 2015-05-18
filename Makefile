@@ -3,20 +3,17 @@
 
 NULLGRAPH=../nullgraph
 KHMER=../khmer
-QUAKE=/Users/t/Documents/papers/2014-streaming/Quake
+QUAKE=$(HOME)/Quake
+JELLYFISH=$(HOME)/jellyfish-1.1.11/bin/jellyfish
 
 # rseq-mapped.fq.gz and rna.fa from 2014-streaming paper pipeline.
 # ecoli-mapped.fq.gz also from 2014-streaming paper pipeline.
 
-all: compare-sim.txt compare-rseq.txt compare-ecoli.txt \
-	2015-wok-error-correction.html
+all: compare-sim.txt compare-rseq.txt compare-ecoli.txt
 
 clean:
 	-rm simple-genome-reads.fa rseq-mapped.fq.gz.corr
 	-rm ecoli-mapped.fq.gz.keep.gz
-
-2015-wok-error-correction.html: 2015-wok-error-correction.rst
-	rst2html.py 2015-wok-error-correction.rst 2015-wok-error-correction.html
 
 simple-genome.fa:
 	$(NULLGRAPH)/make-random-genome.py -l 1000 -s 1 > simple-genome.fa
@@ -83,16 +80,16 @@ ecoli-mapped.fq.gz.keep.gz: ecoli-mapped.fq.gz
 ecoli-subset.100k.fq: ecoli-mapped.fq.gz
 	sample-reads-randomly.py -R 2 -N 100000 ecoli-mapped.fq.gz -o ecoli-subset.100k.fq
 
-ecoli-subset.100k.cor.fq.gz: ecoli-subset.100k.fq
+ecoli-subset.100k.cor.fq.gz: ecoli-subset.100k.fq ecoli-mapped.fq.gz.keep.gz
 	echo ecoli-subset.100k.fq > ecoli_quake_list.txt
-	ln -fs /usr/local/bin/jellyfish .
+	ln -fs $(JELLYFISH) .
 	gunzip -c ecoli-mapped.fq.gz.keep.gz | $(QUAKE)/bin/count-qmers -q 33 -k 14 > ecoli_dn_counts.out
 	#$(QUAKE)/bin/cov_model.py ecoli_dn_counts.out > ecoli_dn_counts.cov
 	$(QUAKE)/bin/correct -f ecoli_quake_list.txt -p 4 -k 14 -q 33 -c 7.94 -z -m ecoli_dn_counts.out
 	#mv ecoli-mapped.cor.fq.gz ecoli-mapped.dn.cor.fq.gz
 
 ecoli-subset.100k.quake.fq: ecoli-subset.100k.cor.fq.gz ecoli-subset.100k.fq
-	extract-original-reads-from-quake-cor.py ecoli-subset.100k.fq ecoli-subset.100k.cor.fq.gz ecoli-subset.100k.quake.fq
+	./extract-original-reads-from-quake-cor.py ecoli-subset.100k.fq ecoli-subset.100k.cor.fq.gz ecoli-subset.100k.quake.fq
 
 ecoli.dn.k21.kh: ecoli-mapped.fq.gz.keep.gz
 	load-into-counting.py -k 21 -x 8e7 ecoli.dn.k21.kh ecoli-mapped.fq.gz.keep.gz
